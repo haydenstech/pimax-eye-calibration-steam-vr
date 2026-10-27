@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- net48 is what ships: .NET Framework 4.8 is built into Windows 10/11. net8.0 is for testing elsewhere. -->
+    <TargetFrameworks>net48;net8.0</TargetFrameworks>
+    <AssemblyName>Install</AssemblyName>
+    <RootNamespace>Installer</RootNamespace>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.6" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

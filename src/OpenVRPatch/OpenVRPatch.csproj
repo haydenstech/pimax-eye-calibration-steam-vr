@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Unity 2020.3's Mono runtime loads .NET Standard 2.0 assemblies (the game ships netstandard.dll). -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>OpenVRPatch</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Product>EyeTrackingGuide OpenVR patch</Product>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../PvrApi/PvrApi.csproj" Private="false" />
+  </ItemGroup>
+</Project>

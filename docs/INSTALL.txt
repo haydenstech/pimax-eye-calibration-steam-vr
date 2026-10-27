@@ -1,0 +1,47 @@
+EyeTrackingGuide OpenVR patch
+=============================
+
+Lets Pimax's Dream Air eye-tracking calibration app (EyeTrackingGuide.exe) run on
+SteamVR, for example with the CustomHeadsetOpenVR driver, without Pimax Play.
+
+You need your own copy of EyeTrackingGuide. This package contains no Pimax files;
+the installer patches the copy on your PC and keeps backups of the originals.
+
+Install
+-------
+1. Unzip this folder anywhere. (Unzipping it inside the EyeTrackingGuide folder lets
+   the installer find the game on its own.)
+2. Double-click Install.exe. If it asks, paste the path of the folder that contains
+   EyeTrackingGuide.exe and press Enter.
+   - Windows SmartScreen may warn that the app is unrecognised: choose
+     "More info" -> "Run anyway".
+   - If the game is under Program Files, right-click Install.exe -> "Run as administrator".
+3. Start SteamVR with the headset, then run EyeTrackingGuide.exe.
+
+The Tobii eye-tracking service must be running (it is, if eye tracking works for you
+without Pimax Play).
+
+Uninstall
+---------
+Run from a command prompt:   Install.exe --uninstall
+or:                          Install.exe "C:\path\to\EyeTrackingGuide" --uninstall
+This restores the original Pimax files.
+
+Settings
+--------
+OpenVRPatch.ini is copied next to EyeTrackingGuide.exe. Edit it if:
+  - the image is upside down          -> flip_v = false
+  - colours look washed out or dark   -> color_space = linear  (or auto)
+  - the frame rate is low             -> resolution_scale = 0.8
+Menus: trigger or A/X = next, B/Y = back or quit. On the keyboard, Enter = next and Esc = quit.
+
+If something goes wrong
+-----------------------
+Log file: %USERPROFILE%\AppData\LocalLow\Pimax\EyeTrackingGuide\Player.log
+Lines from the patch start with [OpenVRPatch]. Include this file when reporting issues.
+
+If the app crashes as soon as it starts rendering, try launching it with
+  EyeTrackingGuide.exe -force-gfx-direct
+
+Not available without Pimax Play: the automatic IPD adjustment screen, which only
+appears after a failed calibration.
