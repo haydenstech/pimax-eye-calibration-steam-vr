@@ -10,7 +10,7 @@ dotnet build src/OpenVRPatch -c Release
 dotnet build src/Installer -c Release -f net48
 
 rm -rf dist && mkdir -p "$out"
-cp src/OpenVRPatch/bin/Release/OpenVRPatch.dll "$out/"
+cp src/OpenVRPatch/bin/Release/OpenVRPatch.dll src/OpenVRPatch/ThirdParty/win64/openvr_api.dll "$out/"
 cp src/Installer/bin/Release/net48/{Install.exe,Install.exe.config,Mono.Cecil.dll} "$out/"
 cp OpenVRPatch.ini LICENSE THIRD-PARTY-NOTICES.txt "$out/"
 cp docs/INSTALL.txt "$out/README.txt"

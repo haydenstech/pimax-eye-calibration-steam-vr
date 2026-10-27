@@ -28,8 +28,9 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ===============================================================================
-OpenVR C# bindings (compiled into OpenVRPatch.dll)
-https://github.com/ValveSoftware/openvr  (v2.15.6, headers/openvr_api.cs)
+OpenVR (C# bindings compiled into OpenVRPatch.dll; openvr_api.dll, signed by Valve,
+installed next to EyeTrackingGuide.exe)
+https://github.com/ValveSoftware/openvr  (bindings from v2.15.6, headers/openvr_api.cs)
 ===============================================================================
 
 Copyright (c) 2015, Valve Corporation

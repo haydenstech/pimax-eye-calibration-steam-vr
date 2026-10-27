@@ -18,6 +18,8 @@ internal sealed class Patcher
 
 	private const string PatchAssembly = "OpenVRPatch.dll";
 
+	private const string OpenVrApi = "openvr_api.dll";
+
 	// Builds the patch was developed and tested against. Others are attempted if every patch point is found.
 	private static readonly Dictionary<string, string> KnownHashes = new Dictionary<string, string>
 	{
@@ -61,6 +63,13 @@ internal sealed class Patcher
 		string csharp = Path.Combine(_managed, "Assembly-CSharp.dll");
 		string pvr = Path.Combine(_managed, "Managed-PVR.dll");
 		string patchDll = Path.Combine(_managed, PatchAssembly);
+		foreach (string payload in new string[2] { PatchAssembly, OpenVrApi })
+		{
+			if (!File.Exists(Path.Combine(_payloadDir, payload)))
+			{
+				throw new PatchException(payload + " is missing from the installer folder. Unzip the whole package and run Install.exe from there.");
+			}
+		}
 
 		// Always patch from the untouched originals so installing twice gives the same result.
 		string csharpOriginal = EnsureBackup(csharp);
@@ -93,13 +102,7 @@ internal sealed class Patcher
 			csharpAssembly.Write(csharp);
 		}
 
-		string unusedOpenVr = Path.Combine(_plugins, "openvr_api_not_used.dll");
-		string openVr = Path.Combine(_plugins, "openvr_api.dll");
-		if (File.Exists(unusedOpenVr) && !File.Exists(openVr))
-		{
-			File.Move(unusedOpenVr, openVr);
-			Console.WriteLine("Enabled Plugins/x86_64/openvr_api.dll");
-		}
+		InstallOpenVrApi();
 
 		string ini = Path.Combine(_gameDir, "OpenVRPatch.ini");
 		string iniSource = Path.Combine(_payloadDir, "OpenVRPatch.ini");
@@ -127,11 +130,48 @@ internal sealed class Patcher
 		{
 			File.Delete(patchDll);
 		}
-		string openVr = Path.Combine(_plugins, "openvr_api.dll");
-		string unusedOpenVr = Path.Combine(_plugins, "openvr_api_not_used.dll");
-		if (File.Exists(openVr) && !File.Exists(unusedOpenVr))
+		UninstallOpenVrApi();
+	}
+
+	/// <summary>
+	/// Puts the bundled openvr_api.dll next to EyeTrackingGuide.exe. Not every build ships one (some only have
+	/// Plugins/x86_64/openvr_api_not_used.dll), so the patch brings its own. Plugins/x86_64 is left alone:
+	/// Unity would load an openvr_api.dll there in preference to this one.
+	/// </summary>
+	private void InstallOpenVrApi()
+	{
+		string source = Path.Combine(_payloadDir, OpenVrApi);
+		string target = Path.Combine(_gameDir, OpenVrApi);
+		if (File.Exists(target))
 		{
-			File.Move(openVr, unusedOpenVr);
+			if (Sha256(target) == Sha256(source))
+			{
+				return;
+			}
+			EnsureBackup(target);
+		}
+		File.Copy(source, target, overwrite: true);
+		Console.WriteLine("Installed " + OpenVrApi + " next to EyeTrackingGuide.exe");
+		if (File.Exists(Path.Combine(_plugins, OpenVrApi)))
+		{
+			Console.WriteLine("Note: Plugins/x86_64/" + OpenVrApi + " exists and will be loaded instead of the bundled copy.");
+		}
+	}
+
+	private void UninstallOpenVrApi()
+	{
+		string source = Path.Combine(_payloadDir, OpenVrApi);
+		string target = Path.Combine(_gameDir, OpenVrApi);
+		string backup = target + BackupSuffix;
+		if (File.Exists(backup))
+		{
+			File.Copy(backup, target, overwrite: true);
+			File.Delete(backup);
+			Console.WriteLine("Restored " + OpenVrApi);
+		}
+		else if (File.Exists(target) && File.Exists(source) && Sha256(target) == Sha256(source))
+		{
+			File.Delete(target);
 		}
 	}
 
@@ -245,15 +285,18 @@ internal sealed class Patcher
 
 	private static void CheckKnownBuild(string path, string name)
 	{
-		string hash;
+		if (Sha256(path) != KnownHashes[name])
+		{
+			Console.WriteLine("Note: " + name + " is a different build from the one this patch was tested with. Trying anyway.");
+		}
+	}
+
+	private static string Sha256(string path)
+	{
 		using (SHA256 sha = SHA256.Create())
 		using (FileStream stream = File.OpenRead(path))
 		{
-			hash = BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
-		}
-		if (hash != KnownHashes[name])
-		{
-			Console.WriteLine("Note: " + name + " is a different build from the one this patch was tested with. Trying anyway.");
+			return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
 		}
 	}
 }

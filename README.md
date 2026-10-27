@@ -21,7 +21,7 @@ runtime and doesn't depend on Pimax Play:
 | Concern | Stock app | Patched |
 |---|---|---|
 | Eye tracking + calibration | `tobii_stream_engine.dll` → Tobii runtime service | unchanged |
-| Head pose, eye offsets, FOV, render size, controllers | `Managed-PVR.dll` → `libPVRClient64.dll` (Pimax Play) | `OpenVRPatch.dll` → `openvr_api.dll` |
+| Head pose, eye offsets, FOV, render size, controllers | `Managed-PVR.dll` → `libPVRClient64.dll` (Pimax Play) | `OpenVRPatch.dll` → bundled `openvr_api.dll` |
 | Frame submission | `pvrUnityRenderPlugin.dll` → Pimax compositor | `OpenVRPatch.dll` → SteamVR compositor (render-thread callback) |
 | `eyetracking_calibrated` and other Pimax settings | written to the Pimax runtime | logged only |
 
@@ -44,7 +44,7 @@ src/OpenVRPatch/   Runtime assembly copied into the game (netstandard2.0, no Uni
   OpenVRRender.cs    Replacement for pvrUnityRenderPlugin.dll
   PatchSettings.cs   OpenVRPatch.ini reader
   Engine.cs          Unity logging/settings via reflection
-  ThirdParty/        Valve's OpenVR C# binding (BSD-3-Clause)
+  ThirdParty/        Valve's OpenVR C# binding and win64/openvr_api.dll (BSD-3-Clause)
 src/PvrApi/        Build-time declarations of the PVR API types (never shipped)
 src/Installer/     Install.exe: Mono.Cecil patcher (net48; net8.0 build for testing)
 docs/INSTALL.txt   End-user instructions (README.txt in the release zip)

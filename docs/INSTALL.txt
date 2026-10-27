@@ -5,7 +5,8 @@ Lets Pimax's Dream Air eye-tracking calibration app (EyeTrackingGuide.exe) run o
 SteamVR, for example with the CustomHeadsetOpenVR driver, without Pimax Play.
 
 You need your own copy of EyeTrackingGuide. This package contains no Pimax files;
-the installer patches the copy on your PC and keeps backups of the originals.
+the installer patches the copy on your PC and keeps backups of the originals. It also
+puts Valve's openvr_api.dll (included here) next to EyeTrackingGuide.exe.
 
 Install
 -------
@@ -25,7 +26,7 @@ Uninstall
 ---------
 Run from a command prompt:   Install.exe --uninstall
 or:                          Install.exe "C:\path\to\EyeTrackingGuide" --uninstall
-This restores the original Pimax files.
+This restores the original Pimax files and removes openvr_api.dll.
 
 Settings
 --------
