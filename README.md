@@ -36,10 +36,6 @@ user's own assemblies:
 3. **Assembly-CSharp.dll**: the `Application.targetFrameRate` cap in `PVRSession.Start` becomes
    `-1`, so SteamVR alone paces frames.
 
-It also renames the app's bundled `openvr_api_not_used.dll` to `openvr_api.dll`. Installing
-always patches from the backed-up originals, so running it again is safe. No file is written
-unless every patch point is found.
-
 ## Repository layout
 
 ```
